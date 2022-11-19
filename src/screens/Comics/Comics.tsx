@@ -39,12 +39,6 @@ const Comics: NavigationFunctionComponent<Props> = ({componentId}) => {
     setLoadingMore(false)
   }
 
-  const ListHeader = () => {
-    return (
-      <CharacterSearch listType='comics'/>
-    )
-  }
-
   const getFooterSpinner = () => {
     return (
       <>

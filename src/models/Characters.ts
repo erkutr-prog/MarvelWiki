@@ -1,4 +1,4 @@
-import { CharacterComics, Series, Thumbnail, URL } from "./CommonTypes";
+import {CharacterComics, Series, Thumbnail, URL} from './CommonTypes';
 
 export interface ICharacters {
   comics: CharacterComics;

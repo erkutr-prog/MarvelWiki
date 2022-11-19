@@ -13,12 +13,8 @@ const DetailItemView: NavigationFunctionComponent<Props> = ({
 }) => {
   return (
     <View style={{margin: 5, flex: 1}}>
-      <View
-        style={styles.container}>
-        <Text
-          style={styles.nameText}>
-          {data.name}
-        </Text>
+      <View style={styles.container}>
+        <Text style={styles.nameText}>{data.name}</Text>
         {data.role !== undefined ? (
           <Text style={styles.roleText}>{data.role}</Text>
         ) : null}
@@ -33,7 +29,7 @@ const styles = StyleSheet.create({
     flex: 1 / 2,
     borderRadius: 18,
     flexDirection: 'row',
-    padding: 10
+    padding: 10,
   },
   nameText: {
     marginRight: 'auto',
@@ -41,9 +37,9 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   roleText: {
-    alignSelf: 'center', 
-    padding: 10
-  }
-})
+    alignSelf: 'center',
+    padding: 10,
+  },
+});
 
 export default DetailItemView;

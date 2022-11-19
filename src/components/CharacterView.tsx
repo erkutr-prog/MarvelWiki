@@ -1,46 +1,83 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, Dimensions } from 'react-native'
-import React from 'react'
-import { Navigation, NavigationFunctionComponent } from 'react-native-navigation'
-import { ICharacters } from './../models/Characters'
-import { colors } from './../assets/colors'
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  Dimensions,
+} from 'react-native';
+import React from 'react';
+import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
+import {ICharacters} from './../models/Characters';
+import {colors} from './../assets/colors';
 
 type Props = {
-  characterData: ICharacters
-}
+  characterData: ICharacters;
+};
 
-const CharacterView: NavigationFunctionComponent<Props> = ({ componentId, characterData }) => {
+const CharacterView: NavigationFunctionComponent<Props> = ({
+  componentId,
+  characterData,
+}) => {
   const navigateToCharacterDetails = () => {
     Navigation.push(componentId, {
       component: {
         name: 'CharacterDetails',
         passProps: {
-          characterData
-        }
-      }
-    })
-  }
-
+          characterData,
+        },
+      },
+    });
+  };
 
   return (
-    <TouchableOpacity onPress={() => navigateToCharacterDetails()} style={styles.cardContainer}>
-    <View
-      style={styles.imageContainer}>
-      <Image
-        style={styles.image}
-        resizeMode="contain"
-        source={{uri: characterData.thumbnail.path + '.' + characterData.thumbnail.extension}}
-      />
-    </View>
-    <View style={styles.headerContainer}>
-        <Text style={[styles.characterText, { fontWeight: 'bold' }]} numberOfLines={2} >{characterData.name}</Text>
+    <TouchableOpacity
+      onPress={() => navigateToCharacterDetails()}
+      style={styles.cardContainer}>
+      <View style={styles.imageContainer}>
+        <Image
+          style={styles.image}
+          resizeMode="contain"
+          source={{
+            uri:
+              characterData.thumbnail.path +
+              '.' +
+              characterData.thumbnail.extension,
+          }}
+        />
       </View>
-    <View style={styles.infoContainer}>
-        <Text style={[styles.characterText, { alignSelf: 'flex-start',display: characterData.series.items.length > 0 ? 'flex' : 'none'}]}>{characterData.series.items.length.toString() + ' Series' }</Text>
-        <Text style={[styles.characterText, {alignSelf: 'flex-end', display: characterData.comics.items.length > 0 ? 'flex' : 'none'}]}>{characterData.comics.items.length.toString() + ' Comics' }</Text>
-    </View>
-  </TouchableOpacity>
-  )
-}
+      <View style={styles.headerContainer}>
+        <Text
+          style={[styles.characterText, {fontWeight: 'bold'}]}
+          numberOfLines={2}>
+          {characterData.name}
+        </Text>
+      </View>
+      <View style={styles.infoContainer}>
+        <Text
+          style={[
+            styles.characterText,
+            {
+              alignSelf: 'flex-start',
+              display: characterData.series.items.length > 0 ? 'flex' : 'none',
+            },
+          ]}>
+          {characterData.series.items.length.toString() + ' Series'}
+        </Text>
+        <Text
+          style={[
+            styles.characterText,
+            {
+              alignSelf: 'flex-end',
+              display: characterData.comics.items.length > 0 ? 'flex' : 'none',
+            },
+          ]}>
+          {characterData.comics.items.length.toString() + ' Comics'}
+        </Text>
+      </View>
+    </TouchableOpacity>
+  );
+};
 
 const styles = StyleSheet.create({
   cardContainer: {
@@ -68,29 +105,28 @@ const styles = StyleSheet.create({
     flexDirection: 'column',
     alignSelf: 'center',
     width: Dimensions.get('screen').width * 0.4,
-    height: 100
+    height: 100,
   },
   image: {
     alignSelf: 'center',
     resizeMode: 'contain',
-    ...StyleSheet.absoluteFillObject
+    ...StyleSheet.absoluteFillObject,
   },
   characterText: {
-    alignSelf: 'center', 
+    alignSelf: 'center',
     fontWeight: '500',
-    color: colors.TEXT
+    color: colors.TEXT,
   },
   headerContainer: {
-    flexDirection: 'column', 
-    justifyContent: 'center'
+    flexDirection: 'column',
+    justifyContent: 'center',
   },
   infoContainer: {
-    flexDirection: 'row', 
-    justifyContent: 'space-between', 
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     paddingTop: 10,
-    margin: 5
-  }
+    margin: 5,
+  },
 });
 
-
-export default CharacterView
+export default CharacterView;
