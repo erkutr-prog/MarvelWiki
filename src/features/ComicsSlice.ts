@@ -57,7 +57,7 @@ export const searchComics = createAsyncThunk(
 )
 
 const comicsSlice = createSlice({
-    name: 'apartmentList',
+    name: 'comicsSlice',
     initialState: initialState,
     reducers: {
         increaseComicsLimit(state) {

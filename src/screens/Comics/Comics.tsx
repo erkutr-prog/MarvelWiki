@@ -3,10 +3,9 @@ import React, { useEffect, useState } from 'react'
 import { Navigation, NavigationFunctionComponent } from 'react-native-navigation'
 import { useSelector, useDispatch } from 'react-redux'
 import { RootState, AppDispatch } from '../store'
-import { fetchComics, fetchMoreComics } from '../../features/ComicsSlice'
+import { fetchComics, fetchMoreComics, increaseComicsLimit } from '../../features/ComicsSlice'
 import ComicsView from '../../components/ComicsView'
 import { IComics } from '../../models/Comics'
-import { increaseCharactersLimit } from '../../features/CharacterSlice'
 import CharacterSearch from '../../components/SearchBar'
 
 type Props = {}
@@ -35,7 +34,7 @@ const Comics: NavigationFunctionComponent<Props> = ({componentId}) => {
 
   const LoadMore = async() => {
     setLoadingMore(true)
-    await dispatch(increaseCharactersLimit());
+    await dispatch(increaseComicsLimit());
     await dispatch(fetchMoreComics({limit: screenState.limit}));
     setLoadingMore(false)
   }

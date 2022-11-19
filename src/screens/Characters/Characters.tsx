@@ -7,6 +7,7 @@ import { fetchCharacters, fetchMoreCharacters, increaseCharactersLimit } from '.
 import CharacterView from '../../components/CharacterView'
 import { ICharacters } from '../../models/Characters'
 import CharacterSearch from '../../components/SearchBar'
+import {colors} from './../../assets/colors'
 
 type Props = {}
 

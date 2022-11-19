@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, FlatList, TouchableOpacity, Linking } from 'react-native'
+import { View, Text, Image, Dimensions, FlatList, TouchableOpacity, Linking, StyleSheet } from 'react-native'
 import React, { useEffect } from 'react'
 import { Navigation, NavigationFunctionComponent } from 'react-native-navigation'
 import { IComics } from '../../models/Comics'
@@ -25,17 +25,17 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({componentId, comicsD
     const getComicsInfo = () => {
         const title = 'Creators'
         return (
-            <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-                <View style={{justifyContent: 'center', alignItems: 'center', margin: 10}}>
-                    <Image source={{uri: comicsData.thumbnail.path + '.' + comicsData.thumbnail.extension}} style={{width: Dimensions.get('screen').width - 10, height: Dimensions.get('screen').height * 0.25, resizeMode: 'contain'}}/>
+            <View style={styles.infoContainer}>
+                <View style={styles.imageContainer}>
+                    <Image source={{uri: comicsData.thumbnail.path + '.' + comicsData.thumbnail.extension}} style={styles.image}/>
                 </View>
-                <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-                    <Text style={{fontSize: 12, margin: 10, alignSelf: 'center', fontWeight: 'bold'}}>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.titleText}>
                         {comicsData.title}
                     </Text>
                 </View>
-                <View style={{justifyContent: 'center', alignItems: 'center', flexDirection: 'column'}}>
-                    <Text style={{fontSize: 12, margin: 10}}>
+                <View style={styles.descriptionContainer}>
+                    <Text style={styles.descriptionText}>
                         {comicsData.description}
                     </Text>
                 </View>
@@ -72,8 +72,8 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({componentId, comicsD
 
     const getProfileButton = () => {
         return (
-            <TouchableOpacity onPress={() => Linking.openURL(comicsData.urls[0].url)} style={{width: Dimensions.get('screen').width - 10, borderRadius: 10, marginLeft: 10, backgroundColor: 'red', height: 30, justifyContent: 'center', alignItems: 'center'}}>
-                <Text style={{fontWeight: 'bold', color: 'white', alignSelf: 'center'}}>
+            <TouchableOpacity onPress={() => Linking.openURL(comicsData.urls[0].url)} style={styles.linkBtn}>
+                <Text style={styles.linkText}>
                     Marvel Profile
                 </Text>
             </TouchableOpacity>
@@ -82,7 +82,7 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({componentId, comicsD
 
     const HeaderComponent = (title: string) => {
         return (
-            <View style={{alignSelf: 'center', padding: 10}}>
+            <View style={styles.headerContainer}>
                 <Text style={{fontWeight: 'bold'}}>
                     {title}
                 </Text>
@@ -92,7 +92,7 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({componentId, comicsD
 
 
     return (
-        <View style={{flex: 1}}>
+        <View style={styles.container}>
             <FlatList
                 data={comicsData.creators.items}
                 renderItem={({item}) => <DetailItemView componentId={componentId} data={item}/>}
@@ -103,5 +103,64 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({componentId, comicsD
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1
+    },
+    infoContainer: {
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        flexDirection: 'column'
+    },
+    imageContainer: {
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        margin: 10
+    },
+    image: {
+        width: Dimensions.get('screen').width - 10, 
+        height: Dimensions.get('screen').height * 0.25, 
+        resizeMode: 'contain'
+    },
+    titleContainer: {
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        flexDirection: 'column'
+    },
+    titleText: {
+        fontSize: 12, 
+        margin: 10, 
+        alignSelf: 'center', 
+        fontWeight: 'bold'
+    },
+    descriptionContainer: {
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        flexDirection: 'column'
+    },
+    descriptionText: {
+        fontSize: 12, 
+        margin: 10
+    },
+    linkBtn: {
+        width: Dimensions.get('screen').width - 10, 
+        borderRadius: 10, 
+        marginLeft: 10, 
+        backgroundColor: 'red', 
+        height: 30, 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    linkText: {
+        fontWeight: 'bold', 
+        color: 'white', 
+        alignSelf: 'center'
+    },
+    headerContainer: {
+        alignSelf: 'center', 
+        padding: 10
+    }
+})
 
 export default ComicsDetails

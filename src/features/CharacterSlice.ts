@@ -23,7 +23,9 @@ const initialState: CharacterListState = {
 export const fetchCharacters = createAsyncThunk(
     'fetchCharacters',
     async () => {
+        console.log("********here")
         const response = await api.get(`characters?offset=0=&limit=20=&orderBy=name`);
+        console.log("*********response", response);
         if (response !== undefined) {
             return response.data.data.results
         } else {
@@ -57,7 +59,7 @@ export const searchCharacters = createAsyncThunk(
 )
 
 const characterListSlice = createSlice({
-    name: 'apartmentList',
+    name: 'characterList',
     initialState: initialState,
     reducers: {
         increaseCharactersLimit(state) {

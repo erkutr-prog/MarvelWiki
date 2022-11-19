@@ -1,4 +1,4 @@
-import { View, Text, Image, Dimensions, ScrollView, FlatList, SafeAreaView, TouchableOpacity, Linking } from 'react-native'
+import { View, Text, Image, Dimensions, ScrollView, FlatList, SafeAreaView, TouchableOpacity, Linking, StyleSheet } from 'react-native'
 import React, { useEffect } from 'react'
 import { Navigation, NavigationFunctionComponent } from 'react-native-navigation'
 import { ICharacters } from '../../models/Characters'
@@ -25,8 +25,8 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
 
     const getCharacterImage = () => {
         return (
-            <View style={{ flexDirection: 'column', padding: 20,justifyContent: 'center', alignItems: 'center'}}>
-                <Image source={{uri: characterData.thumbnail.path + '.' + characterData.thumbnail.extension}} style={{height: Dimensions.get('screen').height * 0.25, width: Dimensions.get('screen').width - 30, resizeMode: 'contain'}}/>
+            <View style={styles.imageContainer}>
+                <Image source={{uri: characterData.thumbnail.path + '.' + characterData.thumbnail.extension}} style={styles.image}/>
             </View>
         )
     }
@@ -34,8 +34,8 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
 
     const getCharacterDescription = () => {
         return (
-            <View style={{flexDirection: 'column', padding: 20}}>
-                <Text style={{alignSelf: 'center', fontSize: 15}}>
+            <View style={styles.descriptionContainer}>
+                <Text style={styles.description}>
                     {characterData.description}
                 </Text>
             </View>
@@ -44,8 +44,8 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
 
     const getProfileLinkButton = () => {
         return (
-            <TouchableOpacity onPress={() => Linking.openURL(characterData.urls[0].url)} style={{borderRadius: 10, backgroundColor: 'red', justifyContent: 'center', alignItems: 'center', marginRight: 10, height: 40, marginLeft: 5, marginBottom: 10}}>
-                <Text style={{color: 'white', fontWeight: 'bold'}}>
+            <TouchableOpacity onPress={() => Linking.openURL(characterData.urls[0].url)} style={styles.linkBtn}>
+                <Text style={styles.linkText}>
                     Marvel Profile
                 </Text>
             </TouchableOpacity>
@@ -66,7 +66,7 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
     }
 
     const Item = ({data}: {data: Items}) => (
-        <TouchableOpacity style={{width: Dimensions.get('screen').width - 30, borderRadius: 18, backgroundColor: 'beige', alignSelf: 'center', marginBottom: 10}}>
+        <TouchableOpacity style={styles.cardContainer}>
             <Text style={{fontWeight: 'bold', margin: 10, alignSelf: 'center'}}>
                 {data.name}
             </Text>
@@ -93,7 +93,7 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
 
 
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <View style={styles.container}>
             <FlatList
                 data={characterData.comics.items}
                 renderItem={({item}) => <DetailItemView componentId={componentId} data={item}/>}
@@ -104,5 +104,53 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
         </View>
     )
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1, 
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    imageContainer: {
+        flexDirection: 'column', 
+        padding: 20,
+        justifyContent: 'center', 
+        alignItems: 'center'
+    },
+    image: {
+        height: Dimensions.get('screen').height * 0.25,
+        width: Dimensions.get('screen').width - 30, 
+        resizeMode: 'contain'
+    },
+    descriptionContainer: {
+        flexDirection: 'column', 
+        padding: 20
+    },
+    description: {
+        alignSelf: 'center', 
+        fontSize: 15
+    },
+    linkBtn: {
+        borderRadius: 10, 
+        backgroundColor: 'red', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        marginRight: 10, 
+        height: 40, 
+        marginLeft: 5, 
+        marginBottom: 10
+    },
+    linkText: {
+        color: 'white', 
+        fontWeight: 'bold'
+    },
+    cardContainer: {
+        width: Dimensions.get('screen').width - 30, 
+        borderRadius: 18, 
+        backgroundColor: 'beige', 
+        alignSelf: 'center', 
+        marginBottom: 10
+    }
+})
 
 export default CharacterDetails
