@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import { Navigation, NavigationFunctionComponent } from 'react-native-navigation'
 import { ICharacters } from '../../models/Characters'
 import { Items } from '../../models/CommonTypes';
+import DetailItemView from '../../components/DetailItemView';
 
 type Props = {
     characterData: ICharacters
@@ -83,7 +84,6 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
                 null    
                 }
                 {getCharacterStats()}
-                {getProfileLinkButton()}
                 <Text style={{fontWeight: 'bold', alignSelf: 'center', paddingBottom: 10}}>
                     Comics of Characters
                 </Text>
@@ -96,9 +96,10 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({componentId, char
         <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
             <FlatList
                 data={characterData.comics.items}
-                renderItem={({item}) => <Item data={item}/>}
+                renderItem={({item}) => <DetailItemView componentId={componentId} data={item}/>}
                 keyExtractor={(item: Items) => item.name}
                 ListHeaderComponent={InfoSection}
+                ListFooterComponent={getProfileLinkButton}
             />
         </View>
     )

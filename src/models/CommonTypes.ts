@@ -1,6 +1,7 @@
 export type Items = {
     name: string;
     resourceURI: string;
+    role?: string
 };
 
 export type CharacterComics = {

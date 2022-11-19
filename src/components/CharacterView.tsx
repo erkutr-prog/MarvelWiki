@@ -9,7 +9,28 @@ type Props = {
 
 const CharacterView: NavigationFunctionComponent<Props> = ({ componentId, characterData }) => {
 
+  const TopbarComponent = ({}) => {
+    return (
+      <View style={{backgroundColor: 'black', flex: 1}}>
+        <Text style={{color: 'white'}}>
+          alksdfnşjksdnfjkşsdnf
+        </Text>
+      </View>
+    )
+  }
+
   const navigateToCharacterDetails = () => {
+    /* Navigation.mergeOptions(componentId, {
+      topBar: {
+        background: {
+          color: 'white',
+          component: {
+            name: 'TopButton',
+            
+          }
+        }
+      }
+    }) */
     Navigation.push(componentId, {
       component: {
         name: 'CharacterDetails',

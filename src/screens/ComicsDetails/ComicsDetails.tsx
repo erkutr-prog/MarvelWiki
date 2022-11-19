@@ -12,7 +12,6 @@ type Props = {
 const ComicsDetails: NavigationFunctionComponent<Props> = ({componentId, comicsData}) => {
 
     useEffect(() => {
-        console.log("*********comics", comicsData.creators);
         Navigation.mergeOptions(componentId, {
             topBar: {
                 title: {

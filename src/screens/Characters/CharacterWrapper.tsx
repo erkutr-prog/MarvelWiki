@@ -10,9 +10,7 @@ type Props = {}
 
 const CharacterWrapper: NavigationFunctionComponent<Props> = ({componentId}) => {
   return (
-    <ReduxProvider store={store}>
         <Characters componentId={componentId}/>
-    </ReduxProvider>
   )
 }
 

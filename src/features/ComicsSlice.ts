@@ -4,24 +4,27 @@ import { IComics } from "../models/Comics";
 
 export type ComicsListState = {
     comics: IComics[],
+    searchedComics: IComics[],
+    searchText: string,
+    limit: number,
     loading: boolean,
     error: boolean
 }
 
-const initialState: ComicsListState = {
+export const initialState: ComicsListState = {
     comics: [],
+    searchedComics: [],
+    searchText: '',
+    limit: 20,
     loading: true,
     error: false
 }
 
 export const fetchComics = createAsyncThunk(
     'fetchComics',
-    async ({limit, offset} : {limit: Number, offset: Number}) => {
-        console.log("********limit", limit);
-        const response = await api.get(`comics?offset=${offset.toString()}=&limit=${limit.toString()}`);
-        console.log("***************responsefirst", response);
+    async () => {
+        const response = await api.get(`comics?offset=0=&limit=20`);
         if (response !== undefined) {
-            console.log("**********response", response);
             return response.data.data.results
         } else {
             throw 'An error occured when fetching comics.'
@@ -29,10 +32,41 @@ export const fetchComics = createAsyncThunk(
     }
 )
 
-const characterListSlice = createSlice({
+export const fetchMoreComics = createAsyncThunk(
+    'fetchMoreComics',
+    async ({limit}: {limit: number}) => {
+        const response = await api.get(`comics?offset=0=&limit=${limit.toString()}=&orderBy=title`);
+        if (response !== undefined) {
+            return response.data.data.results
+        } else {
+            throw 'An error occured when fetching characters.'
+        }
+    }
+)
+
+export const searchComics = createAsyncThunk(
+    'searchComics',
+    async ({text}: {text: string}) => {
+        const response = await api.get(`comics?titleStartsWith=${text}`);
+        if (response !== undefined) {
+            return response.data.data.results
+        } else {
+            throw 'An error occured when searching.'
+        }
+    }
+)
+
+const comicsSlice = createSlice({
     name: 'apartmentList',
     initialState: initialState,
-    reducers: {},
+    reducers: {
+        increaseComicsLimit(state) {
+            state.limit += 20
+        },
+        setComicsSearchText(state, action) {
+            state.searchText = action.payload
+        }
+    },
     extraReducers: (builder) => {
         builder
             .addCase(fetchComics.fulfilled, (state, action) =>{
@@ -42,7 +76,20 @@ const characterListSlice = createSlice({
             .addCase(fetchComics.rejected, (state) => {
                 state.error = true
             })
+            .addCase(fetchMoreComics.fulfilled, (state, action) => {
+                state.comics = action.payload
+            })
+            .addCase(fetchMoreComics.rejected, (state, action) => {
+                state.error = true
+            })
+            .addCase(searchComics.fulfilled, (state, action) => {
+                state.searchedComics = action.payload
+            })
+            .addCase(searchComics.rejected, (state, action) => {
+                state.error = true
+            })
     }
 })
 
-export default characterListSlice.reducer;
+export const { increaseComicsLimit, setComicsSearchText } = comicsSlice.actions
+export default comicsSlice.reducer;
