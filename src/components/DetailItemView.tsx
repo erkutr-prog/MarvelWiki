@@ -1,25 +1,29 @@
-import {View, Text, Dimensions, StyleSheet} from 'react-native';
-import React from 'react';
+import {View, Text, Dimensions, StyleSheet, TouchableOpacity} from 'react-native';
+import React, { useEffect } from 'react';
 import {Items} from '../models/CommonTypes';
 import {NavigationFunctionComponent} from 'react-native-navigation';
 
 type Props = {
   data: Items;
+  type: string;
+  onPress: Function;
 };
 
 const DetailItemView: NavigationFunctionComponent<Props> = ({
   componentId,
   data,
+  type,
+  onPress
 }) => {
   return (
-    <View style={{margin: 5, flex: 1}}>
+    <TouchableOpacity style={{margin: 5, flex: 1}} onPress={() => onPress(data)}>
       <View style={styles.container}>
         <Text style={styles.nameText}>{data.name}</Text>
         {data.role !== undefined ? (
           <Text style={styles.roleText}>{data.role}</Text>
         ) : null}
       </View>
-    </View>
+    </TouchableOpacity>
   );
 };
 

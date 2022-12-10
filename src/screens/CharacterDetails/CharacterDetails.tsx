@@ -9,12 +9,17 @@ import {
   TouchableOpacity,
   Linking,
   StyleSheet,
+  Modal,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import {ICharacters} from '../../models/Characters';
 import {Items} from '../../models/CommonTypes';
 import DetailItemView from '../../components/DetailItemView';
+import {IComics} from './../../models/Comics';
+import api from './../../utils/Requests';
+import { colors } from '../../assets/colors';
 
 type Props = {
   characterData: ICharacters;
@@ -24,6 +29,9 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({
   componentId,
   characterData,
 }) => {
+  const [isLoading, setLoading] = useState(false)
+
+
   useEffect(() => {
     Navigation.mergeOptions(componentId, {
       topBar: {
@@ -106,12 +114,43 @@ const CharacterDetails: NavigationFunctionComponent<Props> = ({
     );
   };
 
+  const onPressComics = async (item: IComics) => {
+    setLoading(true)
+    const response = await api.get(
+      `comics/${item.resourceURI.split('/').slice(-1)[0]}`
+    );
+    if (response !== undefined) {
+      let comicsData = response.data.data.results[0];
+      Navigation.push(componentId, {
+        component: {
+          name: 'ComicsDetails',
+          passProps: {
+            comicsData
+          }
+        }
+      })
+    }
+    setLoading(false)
+  }
+
   return (
     <View style={styles.container}>
+      <Modal
+        transparent={true}
+        statusBarTranslucent={true}
+        visible={isLoading}
+        >
+          <View style={{flex: 1, opacity: 0.5, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,1)'}}>
+              <ActivityIndicator style={{alignSelf: 'center'}} size='large'/>
+              <Text style={{fontSize: 30, color: colors.DENEME_BG, fontWeight: 'bold'}}>
+                 Loading
+              </Text>
+          </View>
+      </Modal>
       <FlatList
         data={characterData.comics.items}
         renderItem={({item}) => (
-          <DetailItemView componentId={componentId} data={item} />
+          <DetailItemView componentId={componentId} data={item} type={'character'} onPress={(item: IComics) => onPressComics(item)} />
         )}
         keyExtractor={(item: Items) => item.name}
         ListHeaderComponent={InfoSection}

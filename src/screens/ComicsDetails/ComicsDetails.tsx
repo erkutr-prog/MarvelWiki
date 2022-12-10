@@ -7,12 +7,17 @@ import {
   TouchableOpacity,
   Linking,
   StyleSheet,
+  Modal,
+  ActivityIndicator
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Navigation, NavigationFunctionComponent} from 'react-native-navigation';
 import {IComics} from '../../models/Comics';
 import {Items, Series} from '../../models/CommonTypes';
 import DetailItemView from '../../components/DetailItemView';
+import { ICharacters } from '../../models/Characters';
+import api from './../../utils/Requests';
+import { colors } from '../../assets/colors';
 
 type Props = {
   comicsData: IComics;
@@ -22,6 +27,8 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({
   componentId,
   comicsData,
 }) => {
+  const [isLoading, setLoading] = useState(false);
+
   useEffect(() => {
     Navigation.mergeOptions(componentId, {
       topBar: {
@@ -58,6 +65,26 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({
     );
   };
 
+  const onPressCharacter = async(item: ICharacters) => {
+    setLoading(true)
+    const response = await api.get(
+      `characters/${item.resourceURI.split('/').slice(-1)[0]}`
+    );
+    if (response !== undefined) {
+      let characterData = response.data.data.results[0];
+      Navigation.push(componentId, {
+        component: {
+          name: 'CharacterDetails',
+          passProps: {
+            characterData
+          }
+        }
+      })
+    }
+    setLoading(false)
+  }
+
+
   const CharacterList = () => {
     const title = 'Characters';
     return (
@@ -66,7 +93,7 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({
           <FlatList
             data={comicsData.characters.items}
             renderItem={({item}) => (
-              <DetailItemView componentId={componentId} data={item} />
+              <DetailItemView componentId={componentId} data={item} type={'comics'} onPress={(item: ICharacters) => onPressCharacter(item)}  />
             )}
             keyExtractor={(item: Items) => item.name}
             ListHeaderComponent={HeaderComponent(title)}
@@ -95,12 +122,28 @@ const ComicsDetails: NavigationFunctionComponent<Props> = ({
     );
   };
 
+  const onPressCreator = async(item: Items) => {
+    //TODO: Push to the creator detail screen
+  }
+
   return (
     <View style={styles.container}>
+      <Modal
+        transparent={true}
+        statusBarTranslucent={true}
+        visible={isLoading}
+        >
+          <View style={{flex: 1, opacity: 0.5, justifyContent: 'center', alignItems: 'center', backgroundColor: 'rgba(0,0,0,1)'}}>
+              <ActivityIndicator style={{alignSelf: 'center'}} size='large'/>
+              <Text style={{fontSize: 30, color: colors.DENEME_BG, fontWeight: 'bold'}}>
+                 Loading
+              </Text>
+          </View>
+      </Modal>
       <FlatList
         data={comicsData.creators.items}
         renderItem={({item}) => (
-          <DetailItemView componentId={componentId} data={item} />
+          <DetailItemView componentId={componentId} data={item} type={'creators'} onPress={(item: Items) => onPressCreator(item) } />
         )}
         keyExtractor={(item: Items) => item.name}
         ListHeaderComponent={getComicsInfo}
